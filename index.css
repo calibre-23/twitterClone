@@ -2,12 +2,14 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
+    background-color: #023047;
+    color: #fb8500;
 }
 
 /* typography and icons */
 
 h1{
-    color: #0F8CDF;
+    color: #fb8500;
     margin-bottom: 10px;
     font-size: 20px;
 }
@@ -22,11 +24,11 @@ i{
 }
 
 .liked{
-    color: red;
+    color: #ae2012;
 }
 
 .retweeted {
-  color: limegreen;
+  color: #219ebc;
 }
 
 /* layout */
@@ -57,24 +59,34 @@ textarea{
     width: 100%;
     font-size: 20px;
     line-height: 30px;
+    background-color: #023047;
+    color: #fb8500 ;
+    border: 1px solid;
+    border-radius: 20px;
+
+    
+}
+textarea:focus{
+    outline: none;
 }
 
 button{
-    background-color: #1DA1F2;
+    background-color: #fb8500;
     border: none;
-    color: white;
+    color: #023047;
     padding: 10px 19px;
     border-radius: 20px;
     width: 100%; 
     cursor: pointer;
     font-size: 20px;
     font-weight: 600;
+    
 }
 
 /* tweet */
 
 .tweet{
-    border-top: 1px solid lightgray;
+    border-top: 1px solid  #219ebc;;
     padding: 20px 0 0 0;
     width: 100%;
     margin: 15px 0;
@@ -99,16 +111,17 @@ button{
 }
 
 .tweet-reply{
-    border-top: 1px solid lightgray;
+    border-top: 1px solid #fb8500;
     padding: 20px 0 0 0px;
     margin: 10px 0 10px 40px;
     width: 80%;
+    color: #999;
 }
 
 .handle{
     font-size: 12px;
     font-weight: 500;
-    color: #555;
+    color: #219ebc;
     margin-top: 0;
 }
 
@@ -121,7 +134,7 @@ button{
 /* images */
 
 .profile-pic{
-    border: 1px solid lightgray;
+    border: 1px solid #fb8500;
     border-radius: 50%;
     width: 48px;
 }
@@ -151,16 +164,15 @@ button{
     line-height: 30px;
 }
 .reply-btn{
-    background-color: #1DA1F2;
+    background-color: #fb8500;
     border: none;
-    color: white;
-    padding: 5px 10px;
+    color: #023047;
+    padding: 2.5px 5px;
     border-radius: 20px;
-    width: 100%; 
+    width: 50%; 
     cursor: pointer;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 600;
-    height:50px
+    height:40px
 }
 
-.reply-input-area div {

@@ -47,7 +47,7 @@ function handleReplyClick(replyId) {
     if (!existingInput) {
         replyContainer.innerHTML += `
             <div class="reply-input-area">
-                <textarea placeholder="reply..." id="reply-input-${replyId}" class="reply-input"></textarea>
+                <textarea placeholder="reply here..." id="reply-input-${replyId}" class="reply-input"></textarea>
                 <button data-reply-submit="${replyId}" class="reply-btn">Reply</button>
             </div>
         `;
