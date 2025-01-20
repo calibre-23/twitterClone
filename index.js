@@ -1,5 +1,13 @@
-import { tweetsData } from './data.js';
+import { tweetsData as tweetsDataFromFile } from './data.js';
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+
+let tweetsData = [];
+if (localStorage.getItem('tweetsData')) {
+    tweetsData = JSON.parse(localStorage.getItem('tweetsData'));
+} else {
+    tweetsData = tweetsDataFromFile;
+    saveToLocalStorage();
+}
 
 document.addEventListener('click', function (e) {
     if (e.target.dataset.like) {
@@ -12,8 +20,18 @@ document.addEventListener('click', function (e) {
         handleTweetBtnClick();
     } else if (e.target.dataset.replySubmit) {
         handleReplySubmitClick(e.target.dataset.replySubmit);
+    } else if (e.target.dataset.deleteTweet) {
+        handleDeleteTweet(e.target.dataset.deleteTweet);
     }
 });
+
+function handleDeleteTweet(tweetId) {
+    tweetsData = tweetsData.filter(tweet => tweet.uuid !== tweetId);
+    saveToLocalStorage();
+    render();
+}
+
+
 
 function handleLikeClick(tweetId) {
     const targetTweetObj = tweetsData.find(tweet => tweet.uuid === tweetId);
@@ -24,6 +42,7 @@ function handleLikeClick(tweetId) {
         targetTweetObj.likes++;
     }
     targetTweetObj.isLiked = !targetTweetObj.isLiked;
+    saveToLocalStorage();
     render();
 }
 
@@ -36,13 +55,14 @@ function handleRetweetClick(tweetId) {
         targetTweetObj.retweets++;
     }
     targetTweetObj.isRetweeted = !targetTweetObj.isRetweeted;
+    saveToLocalStorage();
     render();
 }
 
 function handleReplyClick(replyId) {
     const replyContainer = document.getElementById(`replies-${replyId}`);
     replyContainer.classList.toggle('hidden');
-    
+
     const existingInput = replyContainer.querySelector('.reply-input-area');
     if (!existingInput) {
         replyContainer.innerHTML += `
@@ -66,7 +86,9 @@ function handleReplySubmitClick(replyId) {
             handle: `@Scrimba`,
             profilePic: `images/scrimbalogo.png`,
             tweetText: replyText,
+            uuid: uuidv4(), // Ensure each reply gets its own unique ID
         });
+        saveToLocalStorage();
         render();
     }
 }
@@ -86,6 +108,7 @@ function handleTweetBtnClick() {
             isRetweeted: false,
             uuid: uuidv4(),
         });
+        saveToLocalStorage();
         render();
         tweetInput.value = '';
     }
@@ -93,6 +116,7 @@ function handleTweetBtnClick() {
 
 function getFeedHtml() {
     let feedHtml = ``;
+    const loggedInUser = '@Scrimba';
 
     tweetsData.forEach(function (tweet) {
         let likeIconClass = tweet.isLiked ? 'liked' : '';
@@ -101,6 +125,12 @@ function getFeedHtml() {
         let repliesHtml = '';
         if (tweet.replies.length > 0) {
             tweet.replies.forEach(function (reply) {
+                let deleteReplyHtml = '';
+                if (reply.handle === loggedInUser) {
+                    deleteReplyHtml = `
+                        <i class="fa-solid fa-trash" data-delete-reply="${reply.uuid}" data-tweet-id="${tweet.uuid}" class="delete-reply-btn"></i>
+                    `;
+                }
                 repliesHtml += `
                     <div class="tweet-reply">
                         <div class="tweet-inner">
@@ -110,6 +140,7 @@ function getFeedHtml() {
                                 <p class="tweet-text">${reply.tweetText}</p>
                             </div>
                         </div>
+                        ${deleteReplyHtml}
                     </div>
                 `;
             });
@@ -137,6 +168,9 @@ function getFeedHtml() {
                             </span>
                         </div>
                     </div>
+                    ${tweet.handle === loggedInUser ? `
+                        <i class="fa-solid fa-trash" data-delete-tweet="${tweet.uuid}" class="delete-btn"></i>
+                    ` : ''}
                 </div>
                 <div class="hidden" id="replies-${tweet.uuid}">
                     ${repliesHtml}
@@ -150,6 +184,10 @@ function getFeedHtml() {
 
 function render() {
     document.getElementById('feed').innerHTML = getFeedHtml();
+}
+
+function saveToLocalStorage() {
+    localStorage.setItem('tweetsData', JSON.stringify(tweetsData));
 }
 
 render();
